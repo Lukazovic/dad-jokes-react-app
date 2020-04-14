@@ -6,6 +6,7 @@ class Joke extends Component {
     super(props);
     this.getColor = this.getColor.bind(this);
     this.getEmoji = this.getEmoji.bind(this);
+    this.copyJokeToClipboard = this.copyJokeToClipboard.bind(this);
   }
   getColor() {
     if (this.props.votes >= 15) {
@@ -41,6 +42,10 @@ class Joke extends Component {
       return "em em-angry";
     }
   }
+  copyJokeToClipboard() {
+    navigator.clipboard.writeText(this.props.text);
+    // alert("Joke copied to clipboard!");
+  }
   render() {
     return (
       <div className="Joke">
@@ -53,7 +58,7 @@ class Joke extends Component {
         </div>
         <div className="Joke-text">{this.props.text}</div>
         <div className="Joke-smiley">
-          <i className={this.getEmoji()} />
+          <i className={this.getEmoji()} onClick={this.copyJokeToClipboard} />
         </div>
       </div>
     );
