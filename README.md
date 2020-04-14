@@ -15,6 +15,7 @@
 ## :wrench: Built With
 
 - [React](https://reactjs.org)
+- [Axios](https://www.npmjs.com/package/axios)
 
 ## :page_facing_up: About
 
