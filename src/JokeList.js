@@ -22,27 +22,32 @@ class JokeList extends Component {
     }
   }
   async getJokes() {
-    this.setState({ loading: true });
-    let jokes = [];
-    while (jokes.length < this.props.numJokesToGet) {
-      const URL = "https://icanhazdadjoke.com/";
-      let res = await axios.get(URL, {
-        headers: { Accept: "application/json" },
-      });
-      let newJoke = res.data;
-      if (!this.seenJokes.has(newJoke.id)) {
-        jokes.push({ text: newJoke.joke, votes: 0, id: newJoke.id });
-        this.seenJokes.add(newJoke.id);
+    try {
+      this.setState({ loading: true });
+      let jokes = [];
+      while (jokes.length < this.props.numJokesToGet) {
+        const URL = "https://icanhazdadjoke.com/";
+        let res = await axios.get(URL, {
+          headers: { Accept: "application/json" },
+        });
+        let newJoke = res.data;
+        if (!this.seenJokes.has(newJoke.id)) {
+          jokes.push({ text: newJoke.joke, votes: 0, id: newJoke.id });
+          this.seenJokes.add(newJoke.id);
+        }
       }
+      this.setState(
+        oldState => ({
+          jokes: [...this.state.jokes, ...jokes],
+          loading: false,
+        }),
+        () =>
+          window.localStorage.setItem("jokes", JSON.stringify(this.state.jokes))
+      );
+    } catch (err) {
+      this.setState({ loading: false });
+      alert(err);
     }
-    this.setState(
-      oldState => ({
-        jokes: [...this.state.jokes, ...jokes],
-        loading: false,
-      }),
-      () =>
-        window.localStorage.setItem("jokes", JSON.stringify(this.state.jokes))
-    );
   }
   handleVote(id, delta) {
     this.setState(
