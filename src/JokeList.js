@@ -12,6 +12,7 @@ class JokeList extends Component {
     this.state = {
       jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]"),
     };
+    this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
     if (this.state.jokes.length === 0) {
@@ -27,15 +28,27 @@ class JokeList extends Component {
       });
       jokes.push({ text: res.data.joke, votes: 0, id: res.data.id });
     }
-    this.setState({ jokes });
-    window.localStorage.setItem("jokes", JSON.stringify(jokes));
+    this.setState(
+      oldState => ({
+        jokes: [...this.state.jokes, ...jokes],
+      }),
+      () =>
+        window.localStorage.setItem("jokes", JSON.stringify(this.state.jokes))
+    );
   }
   handleVote(id, delta) {
-    this.setState(oldState => ({
-      jokes: oldState.jokes.map(joke =>
-        joke.id === id ? { ...joke, votes: joke.votes + delta } : joke
-      ),
-    }));
+    this.setState(
+      oldState => ({
+        jokes: oldState.jokes.map(joke =>
+          joke.id === id ? { ...joke, votes: joke.votes + delta } : joke
+        ),
+      }),
+      () =>
+        window.localStorage.setItem("jokes", JSON.stringify(this.state.jokes))
+    );
+  }
+  handleClick() {
+    this.getJokes();
   }
   render() {
     return (
@@ -48,7 +61,9 @@ class JokeList extends Component {
             src="https://assets.dryicons.com/uploads/icon/svg/8927/0eb14c71-38f2-433a-bfc8-23d9c99b3647.svg"
             alt="Laugh Emoji"
           />
-          <button className="JokeList-getmore">New Jokes</button>
+          <button className="JokeList-getmore" onClick={this.handleClick}>
+            New Jokes
+          </button>
         </div>
         <div className="JokeList-jokes">
           {this.state.jokes.map(joke => (
