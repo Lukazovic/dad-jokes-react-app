@@ -28,6 +28,7 @@ Have fun !
 
 ## 💻 How to Use
 
+You can the App in this site: https://dad-jokes-react-app.now.sh/ or you can follow the instructions bellow:
 - Clone the project: `git clone https://github.com/Lukazovic/dad-jokes-react-app.git`;
 - Go to the project folder: `cd dad-jokes-react-app`;
 - Download the dependencies: `npm install`;
